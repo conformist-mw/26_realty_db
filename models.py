@@ -15,23 +15,10 @@ class Ad(db.Model):
     construction_year = db.Column(db.String(5))
     rooms_number = db.Column(db.Integer)
     premise_area = db.Column(db.Float)
-    active = db.Column(db.Boolean)
-    new = db.Column(db.Boolean)
+    active = db.Column(db.Boolean, default=True)
+    new = db.Column(db.Boolean, default=False)
 
     def __init__(self, **kwargs):
         for key in kwargs:
             setattr(self, key, kwargs[key])
-        # self.id = kwargs['id']
-        # self.settlement = kwargs['settlement']
-        # self.under_construction = kwargs['under_construction']
-        # self.description = kwargs['description']
-        # self.price = kwargs['price']
-        # self.oblast_district = kwargs['oblast_district']
-        # self.living_area = kwargs['living_area']
-        # self.has_balcony = kwargs['has_balcony']
-        # self.address = kwargs['address']
-        # self.construction_year = kwargs['construction_year']
-        # self.rooms_number = kwargs['rooms_number']
-        # self.premise_area = kwargs['premise_area']
-        # self.active = kwargs['active']
-        # self.new = kwargs['new']
+
