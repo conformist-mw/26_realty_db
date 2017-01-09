@@ -40,7 +40,7 @@ for ad in json_data:
             setattr(row, key, value)
     if (ad['under_construction'] or
             current_year - int(ad['construction_year'] or 0) < 3):
-        row.new = True
+        row.new_building = True
     row.active = True
 db.session.commit()
 ctx.pop()
