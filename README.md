@@ -18,6 +18,10 @@ pip3 install -r requirements.txt
 from server import db, create_app
 db.create_all(app=create_app())
 ```
+Далее стоит получить/обновить базу:
+```
+python3 update_db.py
+```
 
 ## Запуск
 Для запуска выполняем:
