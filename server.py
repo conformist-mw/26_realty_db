@@ -24,14 +24,10 @@ def ads_list(page=1):
 @app.route('/search', methods=['POST'])
 def search(page=1):
     max_num = db.session.query(func.max(Ad.price)).one()[0]
-    oblast_district = request.form['oblast_district']
-    min_price = request.form.get('min_price', 0, type=int)
-    max_price = request.form.get('max_price', max_num, type=int)
-    new_building = request.form.get('new_building', False, type=bool)
-    session['dist'] = oblast_district
-    session['new'] = new_building
-    session['minv'] = min_price
-    session['maxv'] = max_price
+    session['dist'] = request.form['oblast_district']
+    session['minv'] = request.form.get('min_price', 0, type=int)
+    session['maxv'] = request.form.get('max_price', max_num, type=int)
+    session['new'] = request.form.get('new_building', False, type=bool)
     return redirect(url_for('results'))
 
 
