@@ -13,7 +13,7 @@
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+
   </head>
 
   <body>
@@ -154,23 +154,23 @@
                   <div class="clearfix">
                     <ul class="pagination pull-right">
                     {% if ads.has_prev %}
-		                  <li><a href="{{ url_for(request.endpoint, page=ads.prev_num) }}"><span>«</span></a></li>
+                      <li><a href="{{ url_for(request.endpoint, page=ads.prev_num) }}"><span>«</span></a></li>
                     {% else %}
                       <li class="disabled"><span>«</span></li>
                     {% endif %}
                     {% for page in ads.iter_pages() %}
-				              {% if page %}
+                      {% if page %}
                         {% if page != ads.page %}
                           <li><a href="{{ url_for(request.endpoint, page=page) }}">{{ page }}</a></li>
                         {% else %}
-						              <li class="active"><span>{{ page }}</span></li>
+                          <li class="active"><span>{{ page }}</span></li>
                         {% endif %}
-				              {% else %}
+                      {% else %}
                         <li><span class="ellipsis">...</span></li>
-				              {% endif %}
+                      {% endif %}
                     {% endfor %}
                     {% if ads.has_next %}
-		                  <li><a href="{{ url_for(request.endpoint, page=ads.next_num) }}"><span>»</span></a></li>
+                      <li><a href="{{ url_for(request.endpoint, page=ads.next_num) }}"><span>»</span></a></li>
                     {% else %}
                       <li class="disabled"><span>»</span></li>
                     {% endif %}
