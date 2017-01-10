@@ -14,35 +14,26 @@ app = create_app()
 
 
 @app.route('/')
-def ads_list():
-    return render_template('ads_list.html', ads=[{
-        "settlement": "Череповец",
-        "under_construction": False,
-        "description": '''Квартира в отличном состоянии. Заезжай и живи!''',
-        "price": 2080000,
-        "oblast_district": "Череповецкий район",
-        "living_area": 17.3,
-        "has_balcony": True,
-        "address": "Юбилейная",
-        "construction_year": 2001,
-        "rooms_number": 2,
-        "premise_area": 43.0,
-    }] * 10
-    )
+@app.route('/<int:page>', methods=['GET'])
+def ads_list(page=1):
+    ads = Ad.query.order_by(Ad.price).paginate(page, 10)
+    return render_template('ads_list.html', ads=ads)
 
 
 @app.route('/search', methods=['POST'])
-def search():
+@app.route('/search/<int:page>', methods=['GET', 'POST'])
+def search(page=1):
     max_num = db.session.query(func.max(Ad.price)).one()[0]
-    new_building = request.form.get('new_building', False)
+    new_building = request.form.get('new_building', False, type=bool)
     oblast_district = request.form['oblast_district']
     min_price = request.form.get('min_price', 0, type=int)
     max_price = request.form.get('max_price', max_num, type=int)
-    ans = db.session.query(Ad).filter(
+    ads = Ad.query.filter(
         Ad.oblast_district == oblast_district,
-        Ad.new_building.is_(bool(new_building)),
-        Ad.price > min_price, Ad.price < max_price).all()
-    return render_template('ads_list.html', ads=ans)
+        Ad.new_building.is_(new_building),
+        Ad.price > min_price, Ad.price < max_price,
+        Ad.active.is_(True)).order_by(Ad.price).paginate(page, 10)
+    return render_template('ads_list.html', ads=ads)
 
 
 if __name__ == "__main__":
