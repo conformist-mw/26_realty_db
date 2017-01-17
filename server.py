@@ -2,22 +2,17 @@ from flask import Flask, render_template, request, session, redirect, url_for
 from sqlalchemy.sql import func
 from models import db, Ad
 
-
-def create_app():
-    app = Flask(__name__)
-    app.config.from_object('config')
-    app.secret_key = '!secret'
-    db.init_app(app)
-    return app
-
-
-app = create_app()
+app = Flask(__name__)
+app.config.from_object('config')
+app.secret_key = '!secret'
+db.init_app(app)
+per_page = 10
 
 
 @app.route('/')
 @app.route('/<int:page>', methods=['GET'])
 def ads_list(page=1):
-    ads = Ad.query.order_by(Ad.price).paginate(page, 10)
+    ads = Ad.query.order_by(Ad.price).paginate(page, per_page)
     return render_template('ads_list.html', ads=ads)
 
 
@@ -38,7 +33,7 @@ def results(page=1):
         Ad.oblast_district == session['dist'],
         Ad.new_building.is_(session['new']),
         Ad.price > session['minv'], Ad.price < session['maxv'],
-        Ad.active.is_(True)).order_by(Ad.price).paginate(page, 10, False)
+        Ad.active.is_(True)).order_by(Ad.price).paginate(page, per_page, False)
     return render_template('ads_list.html', ads=ads)
 
 
