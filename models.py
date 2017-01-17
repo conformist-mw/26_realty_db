@@ -17,7 +17,3 @@ class Ad(db.Model):
     premise_area = db.Column(db.Float)
     active = db.Column(db.Boolean, default=True)
     new_building = db.Column(db.Boolean, default=False)
-
-    def __init__(self, **kwargs):
-        for key in kwargs:
-            setattr(self, key, kwargs[key])
