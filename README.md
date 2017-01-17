@@ -15,8 +15,9 @@ pip3 install -r requirements.txt
 
 ## Для создания БД перед первым запуском выполнить:
 ```python
-from server import db, create_app
-db.create_all(app=create_app())
+from server import db, app
+with app.app_context():
+    db.create_all()
 ```
 Далее стоит получить/обновить базу:
 ```
