@@ -1,8 +1,11 @@
-from datetime import datetime
+from datetime import date
 import requests
-from server import db, Ad, app
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from models import Ad
+from config import SQLALCHEMY_DATABASE_URI
 
-cur_year = datetime.now().strftime('%Y')
+cur_year = date.today().year
 year_diff = 3
 url = 'https://devman.org/assets/ads.json'
 
@@ -21,14 +24,14 @@ def get_or_create(session, model, adv_dict):
 
 
 def inactive_olds(ads_ids):
-    old_ads_ids = db.session.query(Ad).filter(Ad.id.notin_(ads_ids))
+    old_ads_ids = session.query(Ad).filter(Ad.id.notin_(ads_ids))
     for ad in old_ads_ids:
         ad.active = False
 
 
 def update_db(data):
     for ad in json_data:
-        row, exist = get_or_create(db.session, Ad, ad)
+        row, exist = get_or_create(session, Ad, ad)
         if exist:
             for key, value in ad.items():
                 if hasattr(row, key):
@@ -42,7 +45,9 @@ def update_db(data):
 if __name__ == '__main__':
     json_data = requests.get(url).json()
     ads_ids = [ad['id'] for ad in json_data]
-    with app.app_context():
-        inactive_olds(ads_ids)
-        update_db(json_data)
-        db.session.commit()
+    engine = create_engine(SQLALCHEMY_DATABASE_URI)
+    session_class = sessionmaker(engine)
+    session = session_class()
+    inactive_olds(ads_ids)
+    update_db(json_data)
+    session.commit()
