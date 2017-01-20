@@ -1,10 +1,11 @@
+from os import getenv
 from flask import Flask, render_template, request, session, redirect, url_for
 from sqlalchemy.sql import func
 from models import db, Ad
 
 app = Flask(__name__)
 app.config.from_object('config')
-app.secret_key = '!secret'
+app.secret_key = getenv('SECRET')
 db.init_app(app)
 per_page = 10
 
